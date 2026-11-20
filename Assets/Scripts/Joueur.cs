@@ -49,13 +49,24 @@ public class Joueur : MonoBehaviour
 
         if (curseurAction.WasPressedThisFrame())
         {
+            Vector2 positionCurseur = Mouse.current.position.ReadValue();
+            Ray rayon = Camera.main.ScreenPointToRay(positionCurseur);
+            bool collision = Physics.Raycast(rayon, out RaycastHit hit, distance, masqueSol);
+            if (collision)
+            {
+                agent.SetDestination(hit.point);
+                Vector3 direction = hit.point - transform.position;direction.y = 0; 
+                rotationCible = Quaternion.LookRotation(direction);
+                
+            }
 
         }
 
 
         if (tirAction.WasPressedThisFrame())
         {
-
+          GameObject clone = Instantiate(projectile, transform.position, transform.rotation);
+          clone.SetActive(true);
         }
 
         // Chaque image, on tourne progressivement vers la rotation cible
